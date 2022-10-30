@@ -28,7 +28,7 @@ function init() {
     const choice = voiceSelect.selectedOptions[0].getAttribute('name');
     const audio = document.createElement('audio');
     const txt = document.getElementById('text-to-speak');
-    const utter = new SpeechSynthesisUtterance(txt.value);
+    var utter = new SpeechSynthesisUtterance(txt.value);
     for (let i = 0; i < voices.length; i++)
     {
       if (voices[i].name === choice)
@@ -37,10 +37,33 @@ function init() {
       }
     }
     window.speechSynthesis.speak(utter);
-    
-  })
-  
 
+    let timeID1;
+    let timeID2;
+    utter.onstart = (event) => {
+      timeID1 = setInterval(opening, 500);
+      timeID2 = setInterval(smiling, 1000);
+    }
+    utter.onend = (event)=> {
+      clearInterval(timeID1);
+      clearInterval(timeID2);
+      smiling();
+    }
+
+
+  })
+
+  const face = document.querySelector('img');
+  function smiling()
+  {
+      face.src = "assets/images/smiling.png";
+  }
+  function opening()
+  {
+    face.src = "assets/images/smiling-open.png";
+  }
+  
+  
 }
 
-console.log(document.getElementById('text-to-speak').value);
+//console.log(utter.onstart);
